@@ -10,7 +10,7 @@ default[:redis][:user]  = 'redis'
 default[:redis][:group] = 'redis'
 
 # Config
-default[:redis][:daemonize]                   = 'no'
+default[:redis][:daemonize]                   = 'yes'
 default[:redis][:pid_file]                    = '/var/run/redis_6379.pid'
 default[:redis][:port]                        = 6379
 default[:redis][:bind_address]                = '127.0.0.1'
