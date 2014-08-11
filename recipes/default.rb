@@ -82,6 +82,12 @@ template "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" do
   mode '0644'
 end
 
+# Write redis backup script 
+template '/etc/init.d/redis-backup.sh' do
+  source 'redis-backup.erb'
+  mode '0744'
+end
+
 # Set up redis service
 service 'redis' do
   supports :reload => false, :restart => true, :start => true, :stop => true

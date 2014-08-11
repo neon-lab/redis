@@ -3,7 +3,7 @@ default[:redis][:version]         = '2.6.13'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
 default[:redis][:install_dir]     = '/usr/local'
 default[:redis][:conf_dir]        = '/etc/redis'
-default[:redis][:db_dir]          = '/srv/redis'
+default[:redis][:db_dir]          = '/mnt/redis'
 
 # Service user & group
 default[:redis][:user]  = 'redis'
@@ -41,3 +41,10 @@ default[:redis][:snapshot_saves]              = [
   { 300 => 10 },
   { 60 => 10000 }
 ]
+
+#backup config
+default[:redis][:access_key] = ''
+default[:redis][:secret_key] = ''
+default[:redis][:backup_s3_bucket] = 'neon-db-backup'
+default[:redis][:backup_log] = '/mnt/neon/redis/backup.log'
+
