@@ -144,8 +144,6 @@ dbfilename <%= node[:redis][:dbfilename] %>
 
 # The working directory.
 #
-# The DB will be written inside this directory, with the filename specified
-# above using the 'dbfilename' configuration directive.
 #
 # The Append Only File will also be created inside this directory.
 #
@@ -368,7 +366,7 @@ slave-priority <%= node[:redis][:slave_priority] %>
 appendonly <%= node[:redis][:appendonly] %>
 
 # The name of the append only file (default: "appendonly.aof")
-# appendfilename appendonly.aof
+appendfilename appendonly.aof
 
 # The fsync() call tells the Operating System to actually write data on disk
 # instead to wait for more data in the output buffer. Some OS will really flush

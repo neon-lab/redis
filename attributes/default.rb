@@ -1,7 +1,7 @@
 # Instillation
 default[:redis][:version]         = '2.6.13'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
-default[:redis][:install_dir]     = '/usr/local'
+default[:redis][:install_dir]     = '/opt/redis'
 default[:redis][:conf_dir]        = '/etc/redis'
 default[:redis][:db_dir]          = '/mnt/redis'
 
@@ -28,7 +28,7 @@ default[:redis][:slave_serve_stale_data]      = 'yes'
 default[:redis][:slave_read_only]             = 'yes'
 default[:redis][:repl_disable_tcp_nodelay]    = 'no'
 default[:redis][:slave_priority]              = 100
-default[:redis][:appendonly]                  = 'no'
+default[:redis][:appendonly]                  = 'yes'
 default[:redis][:appendfsync]                 = 'everysec'
 default[:redis][:no_appendfsync_on_rewrite]   = 'no'
 default[:redis][:auto_aof_rewrite_percentage] = 100
@@ -43,8 +43,6 @@ default[:redis][:snapshot_saves]              = [
 ]
 
 #backup config
-default[:redis][:access_key] = ''
-default[:redis][:secret_key] = ''
 default[:redis][:backup_s3_bucket] = 'neon-db-backup'
-default[:redis][:backup_log] = '/mnt/neon/redis/backup.log'
+default[:redis][:backup_log] = '/mnt/redis/backup.log'
 

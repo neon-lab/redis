@@ -98,3 +98,16 @@ end
 template "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" do
   notifies :restart, resources(:service => 'redis')
 end
+
+# Setup the cronjob to run the redis backup
+cron "redis_backup_cron" do
+    action :create
+    user "statsmanager"
+    hour "12"
+    day "*"
+    minute "00"
+    mailto "ops@neon-lab.com"
+    command "/etc/init.d/redis-backup.sh"
+end
+
+

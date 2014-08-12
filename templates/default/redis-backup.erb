@@ -5,9 +5,22 @@
 #################################################################
 ## USER VARIABLES [S3 Options]
 #################################################################
-AWS_ACCESS_KEY="<%= node[:redis][:access_key] %>"
-AWS_SECRET_KEY="<%= node[:redis][:sercret_key] %>"
-BUCKET="<%= node[:redis][:backup_s3_bucket] %>"
+
+#Get the user role
+ROLE=`curl 'http://169.254.169.254/latest/meta-data/iam/security-credentials/' 2>/dev/null`
+data=`curl 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'$ROLE 2>/dev/null`
+
+#Parse s3 access key and secret key
+key=AccessKeyId
+num=8
+AWS_ACCESS_KEY=`echo $data | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p`
+key=SecretAccessKey
+num=10
+AWS_SECRET_KEY=`echo $data | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p`
+key=Token
+num=12
+TOKEN=`echo $data | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p`
+BUCKET=<%= node[:redis][:backup_s3_bucket] %>
 
 #################################################################
 ## USER VARIABLES [Backup Params]
@@ -47,12 +60,12 @@ fi
 #################################################################
 ## Perform Checks [check for s3cmd config]
 #################################################################
-if [ ! -f ~/.s3cfg ]; then
-echo "Missing s3cmd config.  Creating for you.  Note, you can create one yourself by running \"s3cmd --configure\""
-touch ~/.s3cfg
+echo "Creating s3cmd for you.  Note, you can create one yourself by running \"s3cmd --configure\""
+#touch ~/.s3cfg
 cat>~/.s3cfg<<EOF
 [default]
 access_key = $AWS_ACCESS_KEY
+security_token = $TOKEN
 bucket_location = US
 cloudfront_host = cloudfront.amazonaws.com
 cloudfront_resource = /2010-07-15/distribution
@@ -90,7 +103,6 @@ urlencoding_mode = normal
 use_https = True
 verbosity = WARNING
 EOF
-fi
 
 
 #################################################################
@@ -119,7 +131,7 @@ f_LOG "ERROR\t $@"
 #################################################################
 ## Main
 #################################################################
-for instance in `ls $REDIS_CONF/redis-prod*.conf`; do
+for instance in `ls $REDIS_CONF/*.conf`; do
 
   ## get config 
     CONFIGFILE=`echo $instance`
