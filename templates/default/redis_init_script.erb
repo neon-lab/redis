@@ -7,7 +7,7 @@ REDISPORT=<%= node[:redis][:port] %>
 EXEC=<%= node[:redis][:install_dir] %>/bin/redis-server
 CLIEXEC=<%= node[:redis][:install_dir] %>/bin/redis-cli
 
-PIDFILE=<%= node[:redis][:install_dir] %>
+PIDFILE=<%= node[:redis][:pid_file] %>
 CONF=<%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>
 
 case "$1" in
