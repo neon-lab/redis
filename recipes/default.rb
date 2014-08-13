@@ -12,6 +12,7 @@ src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redi
 src_dir = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}"
 
 include_recipe 'build-essential'
+include_recipe 's3cmd::default'
 
 # Download Redis from source
 remote_file src_url do
@@ -85,7 +86,16 @@ end
 # Write redis backup script 
 template '/etc/init.d/redis-backup.sh' do
   source 'redis-backup.erb'
-  mode '0744'
+  mode '0755'
+end
+  
+# symlink redis  
+link "#{node[:redis][:install_dir]}/bin/redis-server" do
+    to "/usr/local/redis-server"
+end
+
+link "#{node[:redis][:install_dir]}/bin/redis-cli" do
+    to "/usr/local/redis-cli"
 end
 
 # Set up redis service
@@ -102,7 +112,7 @@ end
 # Setup the cronjob to run the redis backup
 cron "redis_backup_cron" do
     action :create
-    user "statsmanager"
+    user "redis"
     hour "12"
     day "*"
     minute "00"
