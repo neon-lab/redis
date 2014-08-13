@@ -11,6 +11,7 @@ src_url = node[:redis][:source_url] || "http://redis.googlecode.com/files/redis-
 src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}.tar.gz"
 src_dir = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}"
 
+# Install the python dependencies
 include_recipe 'build-essential'
 include_recipe 's3cmd::default'
 
@@ -90,12 +91,12 @@ template '/etc/init.d/redis-backup.sh' do
 end
   
 # symlink redis  
-link "#{node[:redis][:install_dir]}/bin/redis-server" do
-    to "/usr/local/redis-server"
+link "/usr/local/bin/redis-server" do
+    to "#{node[:redis][:install_dir]}/bin/redis-server"
 end
 
-link "#{node[:redis][:install_dir]}/bin/redis-cli" do
-    to "/usr/local/redis-cli"
+link "/usr/local/bin/redis-cli" do
+    to "#{node[:redis][:install_dir]}/bin/redis-cli"
 end
 
 # Set up redis service
