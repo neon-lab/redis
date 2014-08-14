@@ -4,8 +4,8 @@
 # as it does use of the /proc filesystem.
 
 REDISPORT=<%= node[:redis][:port] %>
-EXEC=<%= node[:redis][:install_dir] %>/bin/redis-server
-CLIEXEC=<%= node[:redis][:install_dir] %>/bin/redis-cli
+EXEC=/bin/redis-server
+CLIEXEC=/bin/redis-cli
 
 PIDFILE=<%= node[:redis][:pid_file] %>
 CONF=<%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>

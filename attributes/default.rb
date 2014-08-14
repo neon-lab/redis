@@ -1,7 +1,8 @@
 # Instillation
+default[:redis][:redis_pkg_link]  = 'https://neon-dependencies.s3.amazonaws.com/redis-2.8.4.ubuntu.12.04_amd64.deb'
 default[:redis][:version]         = '2.6.13'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
-default[:redis][:install_dir]     = '/opt/redis'
+default[:redis][:install_dir]     = '/bin/redis-server'
 default[:redis][:conf_dir]        = '/etc/redis'
 default[:redis][:db_dir]          = '/mnt/redis'
 

@@ -7,41 +7,20 @@
 # License: MIT
 #
 
-src_url = node[:redis][:source_url] || "http://redis.googlecode.com/files/redis-#{node[:redis][:version]}.tar.gz"
-src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}.tar.gz"
-src_dir = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}"
-
 # Install the python dependencies
 include_recipe 'build-essential'
 include_recipe 's3cmd::default'
 
-# Download Redis from source
-remote_file src_url do
-  source src_url
-  checksum node[:redis][:source_checksum]
-  path src_filepath
-  action :create_if_missing
-end
-
-# Unpack Redis
-bash "unpack redis from #{src_filepath}" do
-  cwd Chef::Config[:file_cache_path] || '/tmp'
-  code "tar -zxf #{src_filepath}"
-  not_if { ::FileTest.exists?(src_dir) }
-end
-
 # Install Redis
-execute 'install-redis' do
-  cwd src_dir
-  command "make PREFIX=#{node[:redis][:install_dir]} install"
-  creates "#{node[:redis]['install_dir']}/redis-server"
+# https://neon-dependencies.s3.amazonaws.com/redis-2.8.4.ubuntu.12.04_amd64.deb
+remote_file "/tmp/redis-installer.deb" do
+  source "{#node[:redis][:redis_pkg_link]}"
+  mode 0644
 end
 
-# Make Redis
-execute 'make-redis' do
-  cwd src_dir
-  command 'make'
-  creates 'redis'
+dpkg_package "redis" do
+  source "/tmp/redis-installer.deb"
+  action :install
 end
 
 # Create Redis user
@@ -85,20 +64,11 @@ template "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" do
 end
 
 # Write redis backup script 
-template '/etc/init.d/redis-backup.sh' do
+template '/etc/init.d/redis-backup' do
   source 'redis-backup.erb'
   mode '0755'
 end
   
-# symlink redis  
-link "/usr/local/bin/redis-server" do
-    to "#{node[:redis][:install_dir]}/bin/redis-server"
-end
-
-link "/usr/local/bin/redis-cli" do
-    to "#{node[:redis][:install_dir]}/bin/redis-cli"
-end
-
 # Set up redis service
 service 'redis' do
   supports :reload => false, :restart => true, :start => true, :stop => true
@@ -118,7 +88,7 @@ cron "redis_backup_cron" do
     day "*"
     minute "00"
     mailto "ops@neon-lab.com"
-    command "/etc/init.d/redis-backup.sh"
+    command "/etc/init.d/redis-backup"
 end
 
 
