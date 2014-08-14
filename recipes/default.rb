@@ -14,7 +14,7 @@ include_recipe 's3cmd::default'
 # Install Redis
 # https://neon-dependencies.s3.amazonaws.com/redis-2.8.4.ubuntu.12.04_amd64.deb
 remote_file "/tmp/redis-installer.deb" do
-  source "{#node[:redis][:redis_pkg_link]}"
+  source "#{node[:redis][:redis_pkg_link]}"
   mode 0644
 end
 
