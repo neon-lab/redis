@@ -46,7 +46,7 @@ directory node[:redis][:conf_dir] do
 end
 
 # Write config file and restart Redis
-template '/etc/init.d/redis' do
+template '/etc/init/redis.conf' do
   source 'redis_init_script.erb'
   mode '0744'
 end

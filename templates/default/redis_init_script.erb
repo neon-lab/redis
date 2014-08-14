@@ -5,5 +5,5 @@ stop on shutdown
 
 setuid redis
 
-exec <%= "#{node[:redis][:install_dir]} %>/redis-server" <%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %> 
+exec <%= "#{node[:redis][:install_dir]}/redis-server" %> <%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %> 
 respawn
