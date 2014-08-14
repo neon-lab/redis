@@ -2,7 +2,7 @@
 default[:redis][:redis_pkg_link]  = 'https://neon-dependencies.s3.amazonaws.com/redis-2.8.4.ubuntu.12.04_amd64.deb'
 default[:redis][:version]         = '2.6.13'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
-default[:redis][:install_dir]     = '/bin/redis-server'
+default[:redis][:install_dir]     = '/bin'
 default[:redis][:conf_dir]        = '/etc/redis'
 default[:redis][:db_dir]          = '/mnt/redis'
 
@@ -11,14 +11,14 @@ default[:redis][:user]  = 'redis'
 default[:redis][:group] = 'redis'
 
 # Config
-default[:redis][:daemonize]                   = 'yes'
+default[:redis][:daemonize]                   = 'no'
 default[:redis][:pid_file]                    = '/var/run/redis_6379.pid'
 default[:redis][:port]                        = 6379
 default[:redis][:bind_address]                = '127.0.0.1'
 default[:redis][:timeout]                     = 0
 default[:redis][:keepalive]                   = 60
 default[:redis][:log_level]                   = 'notice'
-default[:redis][:log_file]                    = '/var/log/redis.log'
+default[:redis][:log_file]                    = '/mnt/redis/redis.log'
 default[:redis][:databases]                   = 16
 default[:redis][:activerehashing]             = 'yes'
 default[:redis][:stop_writes_on_bgsave_error] = 'yes'

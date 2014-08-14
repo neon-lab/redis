@@ -25,14 +25,14 @@ end
 
 # Create Redis user
 user node[:redis][:user] do
-  home node[:redis][:install_dir]
+  home node[:redis][:db_dir]
   comment 'Redis Administrator'
   supports :manage_home => false
   system true
 end
 
 # Own install directory
-directory node[:redis][:install_dir] do
+directory node[:redis][:db_dir] do
   owner node[:redis][:user]
   group node[:redis][:group]
   recursive true
@@ -43,12 +43,6 @@ directory node[:redis][:conf_dir] do
   owner 'root'
   group 'root'
   mode '0755'
-end
-
-# Create Redis database directory
-directory node[:redis][:db_dir] do
-  owner node[:redis][:user]
-  mode '0750'
 end
 
 # Write config file and restart Redis
@@ -71,6 +65,7 @@ end
   
 # Set up redis service
 service 'redis' do
+  provider  Chef::Provider::Service::Upstart
   supports :reload => false, :restart => true, :start => true, :stop => true
   action [ :enable, :start ]
 end
@@ -90,5 +85,3 @@ cron "redis_backup_cron" do
     mailto "ops@neon-lab.com"
     command "/etc/init.d/redis-backup"
 end
-
-
