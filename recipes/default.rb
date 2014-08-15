@@ -11,6 +11,19 @@
 include_recipe 'build-essential'
 include_recipe 's3cmd::default'
 
+# Install boto 2.32.1
+pydeps = {
+  "boto" => "2.32.1",
+}
+
+pydeps.each do |package, vers|
+  python_pip package do
+    version vers
+    options "--no-index --find-links http://s3-us-west-1.amazonaws.com/neon-dependencies/index.html"
+  end
+end
+
+
 # Install Redis
 # https://neon-dependencies.s3.amazonaws.com/redis-2.8.4.ubuntu.12.04_amd64.deb
 remote_file "/tmp/redis-installer.deb" do
