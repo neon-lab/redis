@@ -39,8 +39,9 @@ if __name__ == '__main__':
     
     # Upload to S3
     tarfile = "%s/%s.tar.gz" % (db_dir, fname)
-    k.set_contents_from_filename(tarfile)
-    
+    ret = k.set_contents_from_filename(tarfile)
+    if ret > 0:
+        print "Uploaded backup %s to S3" % tarfile
     # Verify the upload/ checksum ?                                                  
     # Delete the local tar ball
     os.remove(tarfile)
