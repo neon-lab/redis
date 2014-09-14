@@ -11,6 +11,9 @@
 include_recipe 'build-essential'
 include_recipe 's3cmd::default'
 
+# Setup collecting system metrics
+include_recipe "neon::system_metrics"
+
 # Install boto 2.32.1
 pydeps = {
   "boto" => "2.32.1",
