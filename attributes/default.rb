@@ -43,7 +43,10 @@ default[:redis][:snapshot_saves]              = [
   { 60 => 10000 }
 ]
 
-#backup config
+# backup config
 default[:redis][:backup_s3_bucket] = 'neon-db-backup'
 default[:redis][:backup_log] = '/mnt/redis/backup.log'
 
+# slave config
+default[:redis][:video_db_layer] = 'redis'
+default[:redis][:is_slave] = 'no'

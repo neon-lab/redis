@@ -78,7 +78,28 @@ template '/etc/init.d/redis-backup' do
   source 'redis-backup.erb'
   mode '0755'
 end
-  
+
+# Write slave configuration
+if node[:redis][:is_slave] == "yes" then
+
+    video_db_host = nil
+    video_db_layer = node[:opsworks][:layers][node[:redis][:video_db_layer]]
+    video_db_layer[:instances].each do |name, instance|
+        if (instance[:availability_zone] == 
+            node[:opsworks][:instance][:availability_zone] or 
+            video_db_host.nil?) then
+          video_db_host = instance[:private_ip]
+        end
+    end
+    if video_db_host.nil?
+        Chef::Log.info("No Master DB")
+    else
+        bash "write slave" do
+            echo "slaveof #{video_db_host} #{node[:redis][:port]}" >> "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf"
+        end
+    end
+end
+
 # Set up redis service
 service 'redis' do
   provider  Chef::Provider::Service::Upstart
