@@ -42,7 +42,7 @@ default[:redis][:snapshot_saves]              = [
   { 300 => 10 },
   { 60 => 10000 }
 ]
-default[:redis][:notify_keyspace_events]      = ''
+default[:redis][:notify_keyspace_events]      = 'Kgsz$'
 
 # backup config
 default[:redis][:backup_s3_bucket] = 'neon-db-backup'
