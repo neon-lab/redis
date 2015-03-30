@@ -83,6 +83,9 @@ logfile <%= node[:redis][:log_file] %>
 # dbid is a number between 0 and 'databases'-1
 databases <%= node[:redis][:databases] %>
 
+# Set the configration for keyspace push notifications
+notify-keyspace-events <%= node[:redis][:notify_keyspace_events] %>
+
 ################################ SNAPSHOTTING  #################################
 #
 # Save the DB on disk:
