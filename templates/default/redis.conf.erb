@@ -402,7 +402,7 @@ appendonly <%= node[:redis][:appendonly] %>
 # If unsure, use "everysec".
 
 # appendfsync always
-appendfsync <%= node[:redis][:appendonly] %>
+appendfsync <%= node[:redis][:appendfsync] %>
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
