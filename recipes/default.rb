@@ -7,7 +7,7 @@
 # License: MIT
 #
 
-src_url = node[:redis][:source_url] || "http://redis.googlecode.com/files/redis-#{node[:redis][:version]}.tar.gz"
+src_url = node[:redis][:source_url] || "#{node[:redis][:source_base]}/redis-#{node[:redis][:version]}.tar.gz"
 src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}.tar.gz"
 src_dir = "#{Chef::Config['file_cache_path'] || '/tmp'}/redis-#{node[:redis][:version]}"
 

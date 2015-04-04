@@ -1,4 +1,5 @@
-# Instillation
+# Installation
+default[:redis][:source_base] = "http://download.redis.io/releases/"
 default[:redis][:version]         = '2.6.13'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
 default[:redis][:install_dir]     = '/usr/local'
@@ -24,6 +25,8 @@ default[:redis][:stop_writes_on_bgsave_error] = 'yes'
 default[:redis][:rdbcompression]              = 'yes'
 default[:redis][:rdbchecksum]                 = 'yes'
 default[:redis][:dbfilename]                  = 'dump.rdb'
+default[:redis][:master_ip]                   = nil
+default[:redis][:master_port]                 = 6379
 default[:redis][:slave_serve_stale_data]      = 'yes'
 default[:redis][:slave_read_only]             = 'yes'
 default[:redis][:repl_disable_tcp_nodelay]    = 'no'
@@ -41,3 +44,4 @@ default[:redis][:snapshot_saves]              = [
   { 300 => 10 },
   { 60 => 10000 }
 ]
+default[:redis][:notify_keyspace_events]      = ''

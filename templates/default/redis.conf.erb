@@ -83,6 +83,10 @@ logfile <%= node[:redis][:log_file] %>
 # dbid is a number between 0 and 'databases'-1
 databases <%= node[:redis][:databases] %>
 
+# Set the configration for keyspace push notifications
+<% if node[:redis][:notify_keyspace_events] %>
+notify-keyspace-events <%= node[:redis][:notify_keyspace_events] %>
+
 ################################ SNAPSHOTTING  #################################
 #
 # Save the DB on disk:
@@ -160,6 +164,9 @@ dir <%= node[:redis][:db_dir] %>
 # different interval, or to listen to another port, and so on.
 #
 # slaveof <masterip> <masterport>
+<% if not node[:redis][:master_ip].nil? and not node[:redis][:master_ip].empty? then %>
+  slaveof <%= node[:redis][:master_ip] %> <%= node[:redis][:master_port] %>
+<% end %>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
