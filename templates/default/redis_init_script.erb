@@ -1,42 +1,88 @@
-#!/bin/sh
-#
-# Simple Redis init.d script conceived to work on Linux systems
-# as it does use of the /proc filesystem.
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:             redis
+# Required-Start:       $syslog $remote_fs
+# Required-Stop:        $syslog $remote_fs
+# Should-Start:         $local_fs
+# Should-Stop:          $local_fs
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    redis - Persistent key-value db
+# Description:          redis - Persistent key-value db
+### END INIT INFO
 
-REDISPORT=<%= node[:redis][:port] %>
+NAME=redis
+DESC=redis
+RUNDIR=/var/run/redis
 EXEC=<%= node[:redis][:install_dir] %>/bin/redis-server
-CLIEXEC=<%= node[:redis][:install_dir] %>/bin/redis-cli
-
-PIDFILE=<%= node[:redis][:install_dir] %>
+PIDFILE=${RUNDIR}/redis-server.pid
 CONF=<%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>
+DAEMON_ARGS=${CONF}
+
+test -x $EXEC || exit 0
+
+if [ -r /etc/default/$NAME ]
+then
+        . /etc/default/$NAME
+fi
+
+. /lib/lsb/init-functions
+
+set -e
 
 case "$1" in
-    start)
-        if [ -f $PIDFILE ]
+  start)
+        echo -n "Starting $DESC: "
+        mkdir -p $RUNDIR
+        touch $PIDFILE
+        chown redis:redis $RUNDIR $PIDFILE
+        chmod 755 $RUNDIR
+
+        if [ -n "$ULIMIT" ]
         then
-                echo "$PIDFILE exists, process is already running or crashed"
+                ulimit -n $ULIMIT
+        fi
+
+        if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid redis:redis --exec $EXEC -- $DAEMON_ARGS
+        then
+                echo "$NAME."
         else
-                echo "Starting Redis server..."
-                $EXEC $CONF
+                echo "failed"
         fi
         ;;
-    stop)
-        if [ ! -f $PIDFILE ]
+  stop)
+        echo -n "Stopping $DESC: "
+        if start-stop-daemon --stop --retry forever/TERM/1 --quiet --oknodo --pidfile $PIDFILE --exec $EXEC
         then
-                echo "$PIDFILE does not exist, process is not running"
+                echo "$NAME."
         else
-                PID=$(cat $PIDFILE)
-                echo "Stopping ..."
-                $CLIEXEC -p $REDISPORT shutdown
-                while [ -x /proc/${PID} ]
-                do
-                    echo "Waiting for Redis to shutdown ..."
-                    sleep 1
-                done
-                echo "Redis stopped"
+                echo "failed"
+        fi
+        rm -f $PIDFILE
+        sleep 1
+        ;;
+
+  restart|force-reload)
+        ${0} stop
+        ${0} start
+        ;;
+
+  status)
+        echo -n "$DESC is "
+        if start-stop-daemon --stop --quiet --signal 0 --name ${NAME} --pidfile ${PIDFILE}
+        then
+                echo "running"
+        else
+                echo "not running"
+                exit 1
         fi
         ;;
-    *)
-        echo "Please use start or stop as first argument"
+
+  *)
+        echo "Usage: /etc/init.d/$NAME {start|stop|restart|force-reload|status}" >&2
+        exit 1
         ;;
 esac
+
+exit 0
+
