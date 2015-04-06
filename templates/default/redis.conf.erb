@@ -84,7 +84,7 @@ logfile <%= node[:redis][:log_file] %>
 databases <%= node[:redis][:databases] %>
 
 # Set the configration for keyspace push notifications
-<% if node[:redis][:notify_keyspace_events] then %>
+<% if not node[:redis][:notify_keyspace_events].nil? and not node[:redis][:notify_keyspace_events].empty? then %>
 notify-keyspace-events <%= node[:redis][:notify_keyspace_events] %>
 <% end %>
 
