@@ -84,8 +84,9 @@ logfile <%= node[:redis][:log_file] %>
 databases <%= node[:redis][:databases] %>
 
 # Set the configration for keyspace push notifications
-<% if node[:redis][:notify_keyspace_events] %>
+<% if node[:redis][:notify_keyspace_events] then %>
 notify-keyspace-events <%= node[:redis][:notify_keyspace_events] %>
+<% end %>
 
 ################################ SNAPSHOTTING  #################################
 #
@@ -401,7 +402,7 @@ appendonly <%= node[:redis][:appendonly] %>
 # If unsure, use "everysec".
 
 # appendfsync always
-appendfsync <%= node[:redis][:appendonly] %>
+appendfsync <%= node[:redis][:appendfsync] %>
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
