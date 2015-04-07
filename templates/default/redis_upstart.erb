@@ -8,9 +8,9 @@ setgid <%= node[:redis][:group] %>
 setuid <%= node[:redis][:user] %>
 
 
-<%= if node[:redis][:daemonize] == "yes" then %>
+<% if node[:redis][:daemonize] == "yes" then %>
 expect fork
-<%= end %>
+<% end %>
 
 exec <%= node[:redis][:install_dir] %>/bin/redis-server <%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>
 respawn
