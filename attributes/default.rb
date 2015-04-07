@@ -45,3 +45,4 @@ default[:redis][:snapshot_saves]              = [
   { 60 => 10000 }
 ]
 default[:redis][:notify_keyspace_events]      = ''
+default[:redis][:maxclients]                  = 10000

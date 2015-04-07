@@ -296,6 +296,7 @@ slave-priority <%= node[:redis][:slave_priority] %>
 # an error 'max number of clients reached'.
 #
 # maxclients 10000
+maxclients <%= node[:redis][:maxclients] %>
 
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys

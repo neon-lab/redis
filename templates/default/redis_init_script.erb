@@ -18,6 +18,7 @@ EXEC=<%= node[:redis][:install_dir] %>/bin/redis-server
 PIDFILE=${RUNDIR}/redis-server.pid
 CONF=<%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>
 DAEMON_ARGS=${CONF}
+ULIMIT=<%= node[:redis][:maxclients] + 32 %>
 
 test -x $EXEC || exit 0
 
