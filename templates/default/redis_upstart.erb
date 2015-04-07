@@ -1,0 +1,16 @@
+description "redis"
+start on runlevel [2345]
+stop on runlevel [016]
+
+limit nofile <%= node[:redis][:maxclients] + 32 %> <%= node[:redis][:maxclients] + 32 %>
+
+setgid <%= node[:redis][:group] %>
+setuid <%= node[:redis][:user] %>
+
+
+<%= if node[:redis][:daemonize] == "yes" then %>
+expect fork
+<%= end %>
+
+exec <%= node[:redis][:install_dir] %>/bin/redis-server <%= "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" %>
+respawn

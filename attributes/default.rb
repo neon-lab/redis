@@ -1,6 +1,6 @@
 # Installation
 default[:redis][:source_base] = "http://download.redis.io/releases/"
-default[:redis][:version]         = '2.6.13'
+default[:redis][:version]         = '2.8.19'
 default[:redis][:source_checksum] = '2ef8ea6a67465b6c5a5ea49241313d3dbc0de11b'
 default[:redis][:install_dir]     = '/usr/local'
 default[:redis][:conf_dir]        = '/etc/redis'
@@ -11,7 +11,7 @@ default[:redis][:user]  = 'redis'
 default[:redis][:group] = 'redis'
 
 # Config
-default[:redis][:daemonize]                   = 'no'
+default[:redis][:daemonize]                   = 'yes'
 default[:redis][:pid_file]                    = '/var/run/redis_6379.pid'
 default[:redis][:port]                        = 6379
 default[:redis][:bind_address]                = '127.0.0.1'

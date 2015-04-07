@@ -72,21 +72,33 @@ directory node[:redis][:db_dir] do
 end
 
 # Write config file and restart Redis
-template '/etc/init.d/redis' do
-  source 'redis_init_script.erb'
-  mode '0744'
-end
-
-# Write config file and restart Redis
 template "#{node[:redis][:conf_dir]}/#{node[:redis][:port]}.conf" do
   source 'redis.conf.erb'
   mode '0644'
 end
 
-# Set up redis service
-service 'redis' do
-  supports :reload => false, :restart => true, :start => true, :stop => true
-  action [ :enable, :start ]
+# Write service management for Redis
+if node[:platform] == "ubuntu" then
+  template '/etc/init.d/redis.conf' do
+    source 'redis_upstart.erb'
+    mode '0644'
+  end
+
+  service 'redis' do
+    supports :reload => false, :restart => true, :start => true, :stop => true
+    action [ :enable, :start ]
+    provider Chef::Provider::Service::Upstart
+  end
+else
+  template '/etc/init.d/redis' do
+    source 'redis_init_script.erb'
+    mode '0744'
+  end
+
+  service 'redis' do
+    supports :reload => false, :restart => true, :start => true, :stop => true
+    action [ :enable, :start ]
+  end
 end
 
 # Ensure change notifies redis to restart (Comes after resource decliration for OpsWorks chef ~ 9.15) :(
