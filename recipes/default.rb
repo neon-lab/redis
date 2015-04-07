@@ -79,7 +79,7 @@ end
 
 # Write service management for Redis
 if node[:platform] == "ubuntu" then
-  template '/etc/init.d/redis.conf' do
+  template '/etc/init/redis.conf' do
     source 'redis_upstart.erb'
     mode '0644'
   end
