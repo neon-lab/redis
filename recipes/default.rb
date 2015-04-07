@@ -67,7 +67,8 @@ end
 # Create Redis database directory
 directory node[:redis][:db_dir] do
   owner node[:redis][:user]
-  mode '0750'
+  group node[:redis][:group]
+  mode '0755'
 end
 
 # Write config file and restart Redis
