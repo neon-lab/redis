@@ -39,10 +39,10 @@ default[:redis][:auto_aof_rewrite_min_size]   = '64mb'
 default[:redis][:lua_time_limit]              = 5000
 default[:redis][:slowlog_log_slower_than]     = 10000
 default[:redis][:slowlog_max_len]             = 128
-default[:redis][:snapshot_saves]              = [
-  { 900 => 1 },
-  { 300 => 10 },
-  { 60 => 10000 }
-]
+default[:redis][:snapshot_saves]              = {
+   900 => 1,
+   300 => 10,
+   60 => 10000 
+}
 default[:redis][:notify_keyspace_events]      = ''
 default[:redis][:maxclients]                  = 10000
