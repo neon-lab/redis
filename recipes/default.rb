@@ -44,9 +44,7 @@ end
 
 # Create Redis user
 user node[:redis][:user] do
-  home node[:redis][:install_dir]
   comment 'Redis Administrator'
-  supports :manage_home => false
   system true
 end
 
